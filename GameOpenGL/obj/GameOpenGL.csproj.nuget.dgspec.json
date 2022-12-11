@@ -42,7 +42,7 @@
           "dependencies": {
             "OpenTK": {
               "target": "Package",
-              "version": "[4.7.5, )"
+              "version": "[5.0.0-pre.8, )"
             }
           },
           "imports": [

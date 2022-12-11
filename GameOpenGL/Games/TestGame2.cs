@@ -1,5 +1,6 @@
 ﻿using GameOpenGL.Shaders;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
@@ -20,9 +21,9 @@ public class TestGame2 : Game
     };
 
     private ShaderProgram _shaderProgram;
-    private int _vertexBufferObject;
-    private int _vertexArrayObject;
-    private int _elementBufferObject;
+    private BufferHandle _vertexBufferObject;
+    private VertexArrayHandle _vertexArrayObject;
+    private BufferHandle _elementBufferObject;
 
     public TestGame2(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) 
         : base(gameWindowSettings, nativeWindowSettings) { }
@@ -32,8 +33,8 @@ public class TestGame2 : Game
         base.OnLoad();
         
         _vertexBufferObject = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-        GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
+        GL.BindBuffer(BufferTargetARB.ArrayBuffer, _vertexBufferObject);
+        GL.BufferData(BufferTargetARB.ArrayBuffer, _vertices, BufferUsageARB.StaticDraw);
         
         _vertexArrayObject = GL.GenVertexArray();
         GL.BindVertexArray(_vertexArrayObject);
@@ -42,10 +43,9 @@ public class TestGame2 : Game
         GL.EnableVertexAttribArray(0);
         
         _elementBufferObject = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
-        GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
-        
-        
+        GL.BindBuffer(BufferTargetARB.ElementArrayBuffer, _elementBufferObject);
+        GL.BufferData(BufferTargetARB.ElementArrayBuffer, _indices, BufferUsageARB.StaticDraw);
+
         string vertexShaderSource = File.ReadAllText("C:/Users/ooonu/RiderProjects/ConsoleApp1/GameOpenGL/Shaders/Source/shader.vert");
         string fragmentShaderSource = File.ReadAllText("C:/Users/ooonu/RiderProjects/ConsoleApp1/GameOpenGL/Shaders/Source/shader.frag");
         _shaderProgram = new ShaderProgram(vertexShaderSource, fragmentShaderSource);

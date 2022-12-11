@@ -1,10 +1,11 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace GameOpenGL.Shaders;
 
 public class ShaderProgram : IDisposable
 {
-    public readonly int Handle;
+    public readonly ProgramHandle Handle;
     private bool _disposedValue = false;
 
     public ShaderProgram(string vertexShaderSource, string fragmentShaderSource)
@@ -17,11 +18,11 @@ public class ShaderProgram : IDisposable
         GL.AttachShader(Handle, fragmentShader.Handle);
         
         GL.LinkProgram(Handle);
-        
-        GL.GetProgram(Handle, GetProgramParameterName.LinkStatus, out int linkStatusCode);
+        var linkStatusCode = 0;
+        GL.GetProgrami(Handle, ProgramPropertyARB.LinkStatus, ref linkStatusCode);
         if (linkStatusCode != (int)All.True)
         {
-            string? infoLog = GL.GetProgramInfoLog(Handle);
+            GL.GetProgramInfoLog(Handle, out string? infoLog);
             throw new Exception(infoLog);
         }
         
@@ -31,7 +32,7 @@ public class ShaderProgram : IDisposable
     
     public void Use() => GL.UseProgram(Handle);
 
-    public void Deactivate() => GL.UseProgram(0);
+    public void Deactivate() => GL.UseProgram(ProgramHandle.Zero);
 
     public void Delete() => GL.DeleteProgram(Handle);
 

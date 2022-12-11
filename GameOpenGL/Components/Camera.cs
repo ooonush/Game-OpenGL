@@ -6,8 +6,8 @@ namespace GameOpenGL;
 
 public class Camera : Component
 {
-    private Color4 _backgroundColor = Color4.Blue;
-    public Color4 BackgroundColor
+    private Color4<Rgba> _backgroundColor = Color4.Blue;
+    public Color4<Rgba> BackgroundColor
     {
         get => _backgroundColor;
         set

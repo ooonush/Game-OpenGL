@@ -1,5 +1,6 @@
 ﻿using GameOpenGL.Shaders;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
@@ -14,8 +15,8 @@ public class TestGame1 : Game
     };
 
     private ShaderProgram _shaderProgram;
-    private int _vertexBufferObject;
-    private int _vertexArrayObject;
+    private BufferHandle _vertexBufferObject;
+    private VertexArrayHandle _vertexArrayObject;
 
     public TestGame1(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) 
         : base(gameWindowSettings, nativeWindowSettings)
@@ -27,8 +28,8 @@ public class TestGame1 : Game
         base.OnLoad();
         
         _vertexBufferObject = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-        GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
+        GL.BindBuffer(BufferTargetARB.ArrayBuffer, _vertexBufferObject);
+        GL.BufferData(BufferTargetARB.ArrayBuffer, _vertices, BufferUsageARB.StaticDraw);
         
         _vertexArrayObject = GL.GenVertexArray();
         GL.BindVertexArray(_vertexArrayObject);

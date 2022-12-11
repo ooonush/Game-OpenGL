@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace GameOpenGL.Shaders;
 
@@ -19,7 +20,7 @@ public class FragmentShader : Shader
 public abstract class Shader
 {
     public readonly ShaderType ShaderType;
-    public readonly int Handle;
+    public readonly ShaderHandle Handle;
 
     protected Shader(ShaderType shaderType, string shaderSource)
     {
@@ -30,10 +31,11 @@ public abstract class Shader
         GL.ShaderSource(Handle, shaderSource);
         GL.CompileShader(Handle);
         
-        GL.GetShader(Handle, ShaderParameter.CompileStatus, out int compileCode);
+        var compileCode = 0;
+        GL.GetShaderi(Handle, ShaderParameterName.CompileStatus, ref compileCode);
         
         if (compileCode == (int)All.True) return;
-        string? infoLog = GL.GetShaderInfoLog(Handle);
+        GL.GetShaderInfoLog(Handle, out string? infoLog);
         throw new Exception(infoLog);
     }
 }

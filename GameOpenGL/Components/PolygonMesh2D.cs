@@ -24,13 +24,13 @@ public class PolygonMesh2D : Component
 
     public override void Render()
     {
-        GL.Begin(PrimitiveType.Polygon);
-        foreach (Vector3d point in Points)
-        {
-            GL.Color3(FillColor);
-            GL.Vertex3(point.X, point.Y, point.Z);
-        }
-        GL.End();
+        // GL.Begin(PrimitiveType.Polygon);
+        // foreach (Vector3d point in Points)
+        // {
+        //     GL.Color3(FillColor);
+        //     GL.Vertex3(point.X, point.Y, point.Z);
+        // }
+        // GL.End();
     }
 
     private Vector3[] SetupPoints()
