@@ -1,5 +1,6 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GameOpenGL;
 
@@ -23,7 +24,9 @@ public sealed class GameObject
     {
         Transform = AddComponent(new Transform(position));
     }
-    
+
+    public KeyboardState KeyboardState { get; set; }
+
     public void OnLoad()
     {
         foreach (Component component in _components)
@@ -96,7 +99,18 @@ public sealed class GameObject
 
         return null!;
     }
-    
+
+    public IEnumerable<TComponent> GetComponents<TComponent>() where TComponent : Component
+    {
+        foreach (Component component in _components)
+        {
+            if (component is TComponent result)
+            {
+                yield return result;
+            }
+        }
+    }
+
     public bool TryGetComponent<TComponent>(out TComponent component) where TComponent : Component
     {
         foreach (Component component1 in _components)
@@ -121,5 +135,10 @@ public sealed class GameObject
         {
             component.OnDestroy();
         }
+    }
+
+    public List<Component> GetAllGameObjects()
+    {
+        return new List<Component>(_components);
     }
 }

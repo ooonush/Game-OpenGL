@@ -19,10 +19,7 @@ var nativeWinSettings = new NativeWindowSettings()
     // NumberOfSamples = 0
 };
 
-using var game = new TestGame2(GameWindowSettings.Default, nativeWinSettings);
-
-GameObject camera = game.Scene.CreateGameObject(new Transform(0, 0, 2));
-camera.AddComponent<Camera>();
+using var game = new Game3D(GameWindowSettings.Default, nativeWinSettings);
 
 // GameObject polygonGameObject = game.Scene.CreateGameObject();
 // polygonGameObject.Transform.Scale *= 0.2;

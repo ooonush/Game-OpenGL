@@ -52,9 +52,19 @@ public abstract class Component
     {
         return GameObject.GetComponent<TComponent>();
     }
+    
+    public TComponent[] GetComponents<TComponent>() where TComponent : Component
+    {
+        return GameObject.GetComponents<TComponent>().ToArray();
+    }
 
     public bool TryGetComponent<TComponent>(out TComponent component) where TComponent : Component
     {
         return GameObject.TryGetComponent(out component);
+    }
+    
+    public List<Component> GetAllGameObjects()
+    {
+        return GameObject.GetAllGameObjects();
     }
 }

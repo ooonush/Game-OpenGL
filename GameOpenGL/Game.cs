@@ -29,7 +29,7 @@ public class Game : GameWindow
     {
         base.OnUpdateFrame(args);
 
-        Scene.Update(args);
+        Scene.Update(args, this);
         
         if (KeyboardState.IsKeyDown(Keys.Escape))
         {

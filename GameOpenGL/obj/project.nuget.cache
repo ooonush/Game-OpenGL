@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "aRTwrr2DZNYlETGWQ6aqv/d2JkqzK4+qMgkCby+ZE+FD4Y6VxPhZ9Mz9hqotxLgY3iHX9lD29/R5dVFdMyH8uw==",
+  "dgSpecHash": "Uu//8DveeCVvRgPFRdu44GELjqcEXxAMwfH9Zzg1Emj/CR3hw2y8XO0qSOQgx+NyBGzRp0DxJmhXaR+wNMRXrA==",
   "success": true,
   "projectFilePath": "C:\\Users\\ooonu\\RiderProjects\\ConsoleApp1\\GameOpenGL\\GameOpenGL.csproj",
   "expectedPackageFiles": [
@@ -15,6 +15,7 @@
     "C:\\Users\\ooonu\\.nuget\\packages\\opentk.windowing.common\\5.0.0-pre.8\\opentk.windowing.common.5.0.0-pre.8.nupkg.sha512",
     "C:\\Users\\ooonu\\.nuget\\packages\\opentk.windowing.desktop\\5.0.0-pre.8\\opentk.windowing.desktop.5.0.0-pre.8.nupkg.sha512",
     "C:\\Users\\ooonu\\.nuget\\packages\\opentk.windowing.graphicslibraryframework\\5.0.0-pre.8\\opentk.windowing.graphicslibraryframework.5.0.0-pre.8.nupkg.sha512",
+    "C:\\Users\\ooonu\\.nuget\\packages\\stbimagesharp\\2.27.13\\stbimagesharp.2.27.13.nupkg.sha512",
     "C:\\Users\\ooonu\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
   ],
   "logs": []

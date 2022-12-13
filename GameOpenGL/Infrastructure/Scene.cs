@@ -41,10 +41,11 @@ public class Scene
         }
     }
 
-    public void Update(FrameEventArgs args)
+    public void Update(FrameEventArgs args, Game game)
     {
         foreach (GameObject gameObject in _gameObjects)
         {
+            gameObject.KeyboardState = game.KeyboardState;
             gameObject.Update(args);
         }
     }

@@ -28,3 +28,4 @@ C:\Users\ooonu\RiderProjects\ConsoleApp1\GameOpenGL\obj\Debug\net7.0\refint\Game
 C:\Users\ooonu\RiderProjects\ConsoleApp1\GameOpenGL\obj\Debug\net7.0\GameOpenGL.pdb
 C:\Users\ooonu\RiderProjects\ConsoleApp1\GameOpenGL\obj\Debug\net7.0\GameOpenGL.genruntimeconfig.cache
 C:\Users\ooonu\RiderProjects\ConsoleApp1\GameOpenGL\obj\Debug\net7.0\ref\GameOpenGL.dll
+C:\Users\ooonu\RiderProjects\ConsoleApp1\GameOpenGL\bin\Debug\net7.0\StbImageSharp.dll

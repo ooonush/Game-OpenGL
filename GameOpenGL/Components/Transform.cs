@@ -5,7 +5,8 @@ namespace GameOpenGL;
 public class Transform : Component
 {
     public Vector3 Position = Vector3.Zero;
-    public Vector3d Scale = new(1, 1, 1);
+    public Vector3 Scale = new(1, 1, 1);
+    public Quaternion Rotation = Quaternion.Identity;
     
     public Transform() { }
 
@@ -14,5 +15,14 @@ public class Transform : Component
     public Transform(Vector3 position)
     {
         Position = position;
+    }
+
+    public Matrix4 GetModelMatrix()
+    {
+        var scale = Matrix4.CreateScale(Transform.Scale);
+        var rotation = Matrix4.CreateFromQuaternion(Transform.Rotation);
+        var translation = Matrix4.CreateTranslation(Transform.Position);
+        
+        return translation * rotation * scale;
     }
 }

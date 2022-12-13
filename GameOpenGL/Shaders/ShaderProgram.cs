@@ -1,10 +1,16 @@
 ﻿using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace GameOpenGL.Shaders;
 
-public class ShaderProgram : IDisposable
+public sealed class ShaderProgram : IDisposable
 {
+    ~ShaderProgram()
+    {
+        GL.DeleteProgram(Handle);
+    }
+
     public readonly ProgramHandle Handle;
     private bool _disposedValue = false;
 
@@ -16,7 +22,7 @@ public class ShaderProgram : IDisposable
         Handle = GL.CreateProgram();
         GL.AttachShader(Handle, vertexShader.Handle);
         GL.AttachShader(Handle, fragmentShader.Handle);
-        
+
         GL.LinkProgram(Handle);
         var linkStatusCode = 0;
         GL.GetProgrami(Handle, ProgramPropertyARB.LinkStatus, ref linkStatusCode);
@@ -29,9 +35,9 @@ public class ShaderProgram : IDisposable
         DetachAndDeleteShader(vertexShader);
         DetachAndDeleteShader(fragmentShader);
     }
-    
-    public void Use() => GL.UseProgram(Handle);
 
+    public void Use() => GL.UseProgram(Handle);
+    
     public void Deactivate() => GL.UseProgram(ProgramHandle.Zero);
 
     public void Delete() => GL.DeleteProgram(Handle);
@@ -41,23 +47,22 @@ public class ShaderProgram : IDisposable
         GL.DetachShader(Handle, shader.Handle);
         GL.DeleteShader(shader.Handle);
     }
-    
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposedValue) return;
-        
-        GL.DeleteProgram(Handle);
-        _disposedValue = true;
-    }
-    
-    ~ShaderProgram()
-    {
-        GL.DeleteProgram(Handle);
-    }
-    
+
     public void Dispose()
     {
-        Dispose(true);
+        if (!_disposedValue)
+        {
+            GL.DeleteProgram(Handle);
+            _disposedValue = true;
+        }
+        
         GC.SuppressFinalize(this);
+    }
+
+    public void SetMatrix4(string name, bool transpose, Matrix4 matrix)
+    {
+        int location = GL.GetUniformLocation(Handle, name);
+
+        GL.UniformMatrix4f(location, transpose, matrix);
     }
 }
