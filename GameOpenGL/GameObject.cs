@@ -1,32 +1,40 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GameOpenGL;
+
+public class Time
+{
+    public float TimeInSeconds { get; internal set; }
+    public float DeltaTime;
+}
 
 public sealed class GameObject
 {
     public readonly Transform Transform;
+    public Time Time => _scene.Time;
     
     private readonly List<Component> _components = new();
+    private readonly Scene _scene;
 
-    public GameObject()
+    public GameObject(Scene scene)
     {
+        _scene = scene;
         Transform = AddComponent(new Transform());
     }
     
-    public GameObject(Transform transform)
+    public GameObject(Transform transform, Scene scene)
     {
+        _scene = scene;
         Transform = AddComponent(transform);
     }
     
-    public GameObject(Vector3 position)
+    public GameObject(Vector3 position, Scene scene)
     {
+        _scene = scene;
         Transform = AddComponent(new Transform(position));
     }
-
-    public KeyboardState KeyboardState { get; set; }
-
+    
     public void OnLoad()
     {
         foreach (Component component in _components)
@@ -43,11 +51,10 @@ public sealed class GameObject
         }
     }
 
-    public void Update(FrameEventArgs args)
+    public void Update()
     {
         foreach (Component component in _components)
         {
-            component.DeltaTime = (float)args.Time;
             component.Update();
         }
 
@@ -87,7 +94,7 @@ public sealed class GameObject
         return component;
     }
 
-    public TComponent GetComponent<TComponent>() where TComponent : Component
+    public TComponent? GetComponent<TComponent>()
     {
         foreach (Component component in _components)
         {
@@ -97,10 +104,40 @@ public sealed class GameObject
             }
         }
 
-        return null!;
+        return default;
     }
 
-    public IEnumerable<TComponent> GetComponents<TComponent>() where TComponent : Component
+    public TComponent? FindObjectOfType<TComponent>()
+    {
+        var result = new List<TComponent>();
+        
+        foreach (GameObject gameObject in GetAllGameObjects())
+        {
+            if (gameObject.TryGetComponent(out TComponent component))
+            {
+                return component;
+            }
+        }
+
+        return default;
+    }
+
+    public TComponent[] FindObjectsOfType<TComponent>()
+    {
+        var result = new List<TComponent>();
+        
+        foreach (GameObject gameObject in GetAllGameObjects())
+        {
+            if (gameObject.TryGetComponent(out TComponent component))
+            {
+                result.Add(component);
+            }
+        }
+
+        return result.ToArray();
+    }
+
+    public IEnumerable<TComponent> GetComponents<TComponent>()
     {
         foreach (Component component in _components)
         {
@@ -111,7 +148,7 @@ public sealed class GameObject
         }
     }
 
-    public bool TryGetComponent<TComponent>(out TComponent component) where TComponent : Component
+    public bool TryGetComponent<TComponent>(out TComponent component)
     {
         foreach (Component component1 in _components)
         {
@@ -137,8 +174,8 @@ public sealed class GameObject
         }
     }
 
-    public List<Component> GetAllGameObjects()
+    public GameObject[] GetAllGameObjects()
     {
-        return new List<Component>(_components);
+        return _scene.GetAllGameObjects();
     }
 }

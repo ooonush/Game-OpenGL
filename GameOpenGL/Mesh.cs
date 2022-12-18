@@ -1,28 +1,39 @@
+﻿using System.Collections.Generic;
+using GameOpenGL;
+using OpenTK;
 using OpenTK.Mathematics;
 
-namespace GameOpenGL;
-
-public class Mesh
+namespace ObjRenderer
 {
-    public readonly Vertex[] Vertices;
-    
-    public Mesh(Vertex[] vertices)
+    public class Mesh
     {
-        Vertices = vertices;
-    }
-    
-    public Mesh(IReadOnlyList<float> vertices)
-    {
-        Vertices = new Vertex[vertices.Count / 5];
-        for (var i = 0; i < Vertices.Length; i++)
+        public readonly List<Vector3> verts = new List<Vector3>();
+        public readonly List<Vector3> norms = new();
+        public readonly List<Vector3> textCoords = new();
+        
+        public readonly List<Vector4> vertices = new();
+        public readonly List<Vector3> textureVertices = new();
+        public readonly List<Vector3> normals = new();
+        public readonly List<uint> vertexIndices = new();
+        public readonly List<uint> textureIndices = new();
+        public readonly List<uint> normalIndices = new();
+        
+        public Mesh()
         {
-            int index = i * 5;
-            Vertices[i] = new Vertex(
-                vertices[index], 
-                vertices[index + 1], 
-                vertices[index + 2], 
-                vertices[index + 3], 
-                vertices[index + 4]);
+            
+        }
+        
+        public Mesh(List<Vector4> vertices, List<Vector3> textureVertices, List<Vector3> normals,
+            List<uint> vertexIndices, List<uint> textureIndices, List<uint> normalIndices, List<Vector3> verts, List<Vector3> norms)
+        {
+            this.vertices = vertices;
+            this.textureVertices = textureVertices;
+            this.normals = normals;
+            this.vertexIndices = vertexIndices;
+            this.textureIndices = textureIndices;
+            this.normalIndices = normalIndices;
+            this.verts = verts;
+            this.norms = norms;
         }
     }
 }

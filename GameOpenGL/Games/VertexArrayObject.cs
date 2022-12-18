@@ -16,18 +16,20 @@ public class VertexArrayObject
         VertexBufferObject.BindBuffer();
         
         Handle = GL.GenVertexArray();
-        BindVertexArray();
-        
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
-        GL.EnableVertexAttribArray(0);
-        
-        GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
-        GL.EnableVertexAttribArray(1);
         
         VertexBufferObject.UnbindBuffer();
         UnbindVertexArray();
     }
 
+    public void VertexAttributePointer(uint index, int size, bool normalized, int stride, int offset)
+    {
+        BindVertexArray();
+        VertexBufferObject.BindBuffer();
+        
+        GL.EnableVertexAttribArray(index);
+        GL.VertexAttribPointer(index, size, VertexAttribPointerType.Float, normalized, stride, offset);
+    }
+    
     public void BindAndDrawArrays(PrimitiveType primitiveType)
     {
         BindVertexArray();

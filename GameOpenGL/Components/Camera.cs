@@ -1,15 +1,12 @@
-﻿using System.Drawing;
-using GameOpenGL.Shaders;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GameOpenGL;
 
 public class Camera : Component
 {
-    private Color4<Rgba> _backgroundColor = Color4.Blue;
+    private Color4<Rgba> _backgroundColor = Color4.Darkgray;
     public Color4<Rgba> BackgroundColor
     {
         get => _backgroundColor;
@@ -19,55 +16,18 @@ public class Camera : Component
             GL.ClearColor(BackgroundColor);
         }
     }
-
+    
     public Matrix4 View;
     public Matrix4 Projection;
-    
-    private const float Speed = 1.5f;
-
-    private readonly Vector3 _front = new(0.0f, 0.0f, -1.0f);
-    private readonly Vector3 _up = new(0.0f, 1.0f,  0.0f);
     
     public override void OnLoad()
     {
         GL.ClearColor(BackgroundColor);
     }
 
-    public override void Update()
+    public override void LateUpdate()
     {
-        KeyboardState input = GameObject.KeyboardState;
-        
-        if (input.IsKeyDown(Keys.W))
-        {
-            Transform.Position += _front * Speed; //Forward 
-        }
-
-        if (input.IsKeyDown(Keys.S))
-        {
-            Transform.Position -= _front * Speed; //Backwards
-        }
-
-        if (input.IsKeyDown(Keys.A))
-        {
-            Transform.Position -= Vector3.Normalize(Vector3.Cross(_front, _up)) * Speed; //Left
-        }
-
-        if (input.IsKeyDown(Keys.D))
-        {
-            Transform.Position += Vector3.Normalize(Vector3.Cross(_front, _up)) * Speed; //Right
-        }
-        
-        if (input.IsKeyDown(Keys.Space))
-        {
-            Transform.Position += _up * Speed; //Up 
-        }
-        
-        if (input.IsKeyDown(Keys.LeftShift))
-        {
-            Transform.Position -= _up * Speed; //Down
-        }
-        
-        View = Matrix4.LookAt(Transform.Position, Vector3.Zero, Vector3.UnitY);
+        View = Matrix4.LookAt(Transform.Position,  Transform.Position + Transform.Forward, Transform.Up);
     }
 
     public override void OnResize(ResizeEventArgs e)
@@ -82,5 +42,11 @@ public class Camera : Component
     public override void Render()
     {
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        
+        var renderers = FindObjectsOfType<IRenderer>();
+        foreach (IRenderer renderer in renderers)
+        {
+            renderer.Draw(Transform.Position, View, Projection);
+        }
     }
 }

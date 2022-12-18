@@ -1,55 +1,66 @@
 ﻿using System.Drawing;
+using GameOpenGL.Shaders;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace GameOpenGL;
 
-public class PolygonMesh2D : Component
+public class PolygonMesh2D : Renderer
 {
-    public int Faces;
     public Color FillColor;
+    private readonly VertexArrayObject _vao;
+    private readonly ElementsBufferObject _elements;
 
     public Vector3[] Points { get; private set; } = null!;
 
-    public PolygonMesh2D(int faces, Color fillColor)
+    public PolygonMesh2D(ShaderProgram shader, Material material, int faces) : base(shader, material)
     {
-        Faces = faces;
-        FillColor = fillColor;
-    }
-
-    public override void Update()
-    {
-        Points = SetupPoints();
-    }
-
-    public override void Render()
-    {
-        // GL.Begin(PrimitiveType.Polygon);
-        // foreach (Vector3d point in Points)
-        // {
-        //     GL.Color3(FillColor);
-        //     GL.Vertex3(point.X, point.Y, point.Z);
-        // }
-        // GL.End();
-    }
-
-    private Vector3[] SetupPoints()
-    {
-        double deltaAngleRad = 2 * Math.PI / Faces;
-        var points = new List<Vector3>();
-        Vector3d center = Transform.Position;
+        double deltaAngleRad = 2 * Math.PI / faces;
+        var vertices = new List<float>();
         
-        for (var i = 1; i <= Faces; i++)
+        vertices.Add(0);
+        vertices.Add(0);
+        vertices.Add(0);
+        vertices.Add(0);
+        vertices.Add(0);
+        vertices.Add(1);
+        for (var i = 0; i <= faces; i++)
         {
             double delta = deltaAngleRad * i;
-            double sizeY = Math.Cos(delta);
             
-            double y = center.Y + sizeY * Transform.Scale.Y;
-            double sizeX = Math.Sin(delta);
-            double x = center.X + sizeX * Transform.Scale.X;
-            points.Add(new Vector3( (float)(x + center.X), (float)(y + center.Y), (float)(center.Z)));
+            float y = (float)Math.Cos(delta) / 2;
+            float x = (float)Math.Sin(delta) / 2;
+            // vertex
+            vertices.Add(x);
+            vertices.Add(y);
+            vertices.Add(0);
+            // normal
+            vertices.Add(0);
+            vertices.Add(0);
+            vertices.Add(1);
         }
+
+        var indices = new List<uint>();
+
+        for (uint i = 0; i < vertices.Count / 2; i++)
+        {
+            indices.Add(0);
+            indices.Add(i);
+            indices.Add(i + 1);
+        }
+
+        _vao = new VertexArrayObject(vertices.ToArray());
+        _elements = new ElementsBufferObject(_vao, indices.ToArray());
+
+        _vao.VertexAttributePointer(0, 3, false, 6 * sizeof(float), 0);
+        _vao.VertexAttributePointer(1, 3, false, 6 * sizeof(float), 3 * sizeof(float));
+    }
+
+    public override void Draw(Vector3 viewPosition, Matrix4 view, Matrix4 projection)
+    {
+        base.Draw(viewPosition, view, projection);
         
-        return points.ToArray();
+        ShaderProgram.Use();
+        _elements.BindVertexArrayAndDraw(PrimitiveType.Triangles);
     }
 }

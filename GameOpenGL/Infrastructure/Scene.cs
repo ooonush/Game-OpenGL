@@ -5,17 +5,23 @@ namespace GameOpenGL;
 public class Scene
 {
     private readonly HashSet<GameObject> _gameObjects = new();
+    public readonly Time Time = new Time();
 
+    public GameObject[] GetAllGameObjects()
+    {
+        return _gameObjects.ToArray();
+    }
+    
     public GameObject CreateGameObject()
     {
-        var gameObject = new GameObject();
+        var gameObject = new GameObject(this);
         _gameObjects.Add(gameObject);
         return gameObject;
     }
 
     public GameObject CreateGameObject(Transform transform)
     {
-        var gameObject = new GameObject(transform);
+        var gameObject = new GameObject(transform, this);
         _gameObjects.Add(gameObject);
         return gameObject;
     }
@@ -41,12 +47,13 @@ public class Scene
         }
     }
 
-    public void Update(FrameEventArgs args, Game game)
+    public void Update(FrameEventArgs args)
     {
+        Time.TimeInSeconds += (float)args.Time;
+        Time.DeltaTime = (float)args.Time;
         foreach (GameObject gameObject in _gameObjects)
         {
-            gameObject.KeyboardState = game.KeyboardState;
-            gameObject.Update(args);
+            gameObject.Update();
         }
     }
     
